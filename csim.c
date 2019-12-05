@@ -32,5 +32,6 @@ int main(int argc, char** argv) {
 			case 'h':
 			default:
 				  // print out how to use this
+					// print stuff here
 		}
 	}
