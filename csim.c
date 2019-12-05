@@ -6,6 +6,8 @@ typedef struct _line{
 	int lru;
 } line;
 
+FILE *tracefile;
+
 extern char *optarg;
 extern int optind;
 
@@ -31,7 +33,9 @@ int main(int argc, char** argv) {
 
 			case 'h':
 			default:
-				  // print out how to use this
-					// print stuff here
-		}
+				fprintf(stderr, "Usage: %s [-hvsEbt] [tracefile]\n", argv[0]);
+				exit(EXIT_FAILURE);
+			}
+
+			tracefile = fopen(t, "r");
 	}
