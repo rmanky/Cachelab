@@ -63,7 +63,9 @@ int LRU(line ** arrayCache, int sets, int lines, int setUsed) {
 }
 
 int main(int argc, char ** argv) {
-    int hits, misses, evicts = 0;
+    int hits = 0;
+		int misses = 0;
+		int evicts = 0;
 
     int opt;
     int VERBOSE = 0; //default off
@@ -105,7 +107,7 @@ int main(int argc, char ** argv) {
 
     int numberOfSets = pow(2, s);
 
-    struct _line ** arrayCache = malloc(numberOfSets * sizeof(struct _line*));
+    struct _line ** arrayCache = malloc(numberOfSets * sizeof(struct _line * ));
     if (arrayCache == NULL) {
         printf("%s\n", "Malloc error");
         return 1;
@@ -169,7 +171,7 @@ int main(int argc, char ** argv) {
                 }
             }
 
-            switch (*insToken) {
+            switch ( * insToken) {
             case 'M':
                 if (hitBool) {
                     hits += 2;
@@ -193,6 +195,24 @@ int main(int argc, char ** argv) {
                 break;
 
             case 'L':
+                if (hitBool) {
+                    hits += 1;
+                    if (VERBOSE) {
+                        printf("%s\n", "hit");
+                    }
+                } else if (evictBool) {
+                    misses += 1;
+                    evicts += 1;
+                    if (VERBOSE) {
+                        printf("%s\n", "miss eviction");
+                    }
+                } else {
+                    misses += 1;
+                    if (VERBOSE) {
+                        printf("%s\n", "miss");
+                    }
+                }
+                break;
             case 'S':
                 if (hitBool) {
                     hits += 1;
