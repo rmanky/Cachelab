@@ -1,3 +1,5 @@
+// Robear Mankaryous rmankaryous@wpi.edu
+
 #include "cachelab.h"
 
 typedef struct _line{
@@ -38,4 +40,19 @@ int main(int argc, char** argv) {
 			}
 
 			tracefile = fopen(t, "r");
+			if(tracefile == NULL) {
+				printf("Tracefile could not be opened");
+				exit(EXIT_FAILURE);
+			}
+
+			int numberOfSets = pow(2, s);
+
+			struct _line **arrayCache = malloc(numberOfSets * sizeof(struct _line*));
+			if(arrayCache == NULL) {
+				printf("")
+			}
+
+			for (int i = 0; i < numSets; i++) {
+
+			}
 	}
