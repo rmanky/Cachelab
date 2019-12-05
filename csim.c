@@ -26,20 +26,27 @@ extern int optind;
 void ageUpdate(line **arrayCache, int sets, int lines, int setUsed, int lineUsed) {
 	for (int i = 0; i < lines; i++) {
 		if (i == lineUsed) {
-			(arrayCache[setUsed][i]).age = 0;
+			(arrayCache[setUsed][i]).lru = 0;
 		}
 		else {
-			(arrayCache[setUsed][j]).age += 1;
+			(arrayCache[setUsed][i]).lru += 1;
 		}
 	}
+}
+
+void clean(line** arrayCache, int sets, int lines) {
+	for(int i = 0; i < sets; i++) {
+		free(arrayCache[i]);
+	}
+	free(arrayCache);
 }
 
 int LRU(line **arrayCache, int sets, int lines, int setUsed) {
 	int rLine, rAge = -1;
 
 	for (int i = 0; i < lines; i++) {
-		if ((arrayCache[setUsed][i]).age > rAge) {
-			rAge = (arrayCache[setUsed][i]).age;
+		if ((arrayCache[setUsed][i]).lru > rAge) {
+			rAge = (arrayCache[setUsed][i]).lru;
 			rLine = i;
 		}
 	}
@@ -71,9 +78,9 @@ int main(int argc, char** argv) {
 				exit(EXIT_FAILURE);
 			}
 
-			tracefile = fopen(t, "r");
+			tracefile = fopen(trace, "r");
 			if (tracefile == NULL) {
-				printf("%\n","Tracefile could not be opened");
+				printf("%s\n","Tracefile could not be opened");
 				exit(EXIT_FAILURE);
 			}
 
@@ -81,14 +88,14 @@ int main(int argc, char** argv) {
 
 			struct _line **arrayCache = malloc(numberOfSets * sizeof(struct _line*));
 			if (arrayCache == NULL) {
-				printf("%\n","Malloc error");
+				printf("%s\n","Malloc error");
 				exit(EXIT_FAILURE);
 			}
 
-			for (int i = 0; i < numSets; i++) {
+			for (int i = 0; i < numberOfSets; i++) {
 					arrayCache[i] = malloc(E * sizeof(struct _line));
-					if (arrayCache[i] = NULL) {
-						printf("%\n","Malloc error");
+					if (arrayCache[i] == NULL) {
+						printf("%s\n","Malloc error");
 						exit(EXIT_FAILURE);
 					}
 			}
@@ -119,7 +126,7 @@ int main(int argc, char** argv) {
 					set = ((addr << (64 - s - b)) >> (64 - s));
 
 					for (int i = 0; i < E; i++) {
-						if ((arrayCache[set][i]).valid == 1) && (arrayCache[set][i].tag == tag) {
+						if ((arrayCache[set][i]).valid == 1 && (arrayCache[set][i]).tag == tag) {
 							hitBool = 1;
 							ageUpdate(arrayCache, numberOfSets, E, set, i);
 							break;
@@ -201,3 +208,4 @@ int main(int argc, char** argv) {
 
 			return 0;
 	}
+}
